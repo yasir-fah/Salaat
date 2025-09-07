@@ -31,6 +31,7 @@ public class AiService {
             throw new ApiException("image bytes are empty");
         }
 
+
         String systemPrompt = """
                 أنت مساعد بصري متخصص في تحليل صورة واحدة فقط.
                 أجب بالعربية فقط.
@@ -65,6 +66,7 @@ public class AiService {
             }
         };
 
+        log.info("start analyzing game");
         String content = chatClient
                 .prompt()
                 .options(OpenAiChatOptions.builder()
@@ -75,6 +77,7 @@ public class AiService {
                 .user(u -> u.text(userPrompt).media(MediaType.IMAGE_PNG, resource))
                 .call()
                 .content();
+        log.info("finished analyzing game");
 
 
         if (content.startsWith("```")) {
@@ -88,7 +91,6 @@ public class AiService {
 
         try {
             return objectMapper.readValue(content, AnalyseGameDTO.class);
-
         } catch (Exception e) {
             log.error("Failed to analyze image / parse JSON", e);
             return new AnalyseGameDTO(null,null,null,null,null,null);
@@ -125,12 +127,14 @@ public class AiService {
                 """.formatted(allComment);
 
         try {
+            log.info("start feedback analyzing");
             return chatClient
                     .prompt(prompt)
                     .call()
                     .content();
         } catch (Exception e) {
-            return "Unable to analyze reviews at this time. Please try again later.";
+            log.error(e.getMessage());
+            return e.getMessage();
         }
     }
 
@@ -165,6 +169,7 @@ public class AiService {
                 """.formatted(allComment);
 
         try {
+            log.info("start analyzing subHall feedbacks");
             return chatClient
                     .prompt(prompt)
                     .call()

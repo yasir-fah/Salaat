@@ -4,10 +4,12 @@ import com.finalproject.tuwaiqfinal.Api.ApiException;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import kong.unirest.UnirestException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class WhatsAppService {
 
     @Value("${ultramsg.base-url}")
@@ -32,11 +34,10 @@ public class WhatsAppService {
                     .asString();
 
             if (res.getStatus() < 200 || res.getStatus() >= 300) {
-                throw new RuntimeException("Failed to send WhatsApp: HTTP "
-                        + res.getStatus() + " - " + res.getBody());
+                log.error("Failed to send WhatsApp: HTTP {} - {}", res.getStatus(), res.getBody());
             }
         } catch (UnirestException e) {
-            throw new RuntimeException("Failed to send WhatsApp", e);
+            log.error("Failed to send WhatsApp {}", e.getMessage());
         }
     }
 
@@ -88,7 +89,7 @@ public class WhatsAppService {
         if (instanceId == null || instanceId.isBlank())
             throw new ApiException("missing ULTRAMSG_INSTANCE_ID");
         if (token == null || token.isBlank())
-            throw new IllegalStateException("missing ULTRAMSG_TOKEN");
+            log.error("missing ULTRAMSG_TOKEN");
         return String.format("%s/%s/%s", baseUrl, instanceId, path);
     }
 

@@ -38,8 +38,8 @@ public class HallController {
     }
 
     @DeleteMapping("/delete/{hallId}")
-    public ResponseEntity<?> deleteHall(@PathVariable Integer hallId){
-        hallService.deleteHall(hallId);
+    public ResponseEntity<?> deleteHall(@RequestParam Integer ownerId,@PathVariable Integer hallId){
+        hallService.deleteHall(ownerId,hallId);
         return ResponseEntity.ok(new ApiResponse("Hall has been deleted"));
     }
 

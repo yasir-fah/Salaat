@@ -3,6 +3,7 @@ package com.finalproject.tuwaiqfinal.Service;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MailService {
 
     private final JavaMailSender mailSender;
@@ -30,6 +32,7 @@ public class MailService {
             h.setTo(to);
             h.setSubject(subject);
             h.setText(htmlBody, true); // true = HTML
+            log.info("start sending");
             mailSender.send(mime);
         } catch (MessagingException e) {
             throw new RuntimeException("Failed to send HTML email", e);
