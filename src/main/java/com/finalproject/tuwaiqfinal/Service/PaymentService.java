@@ -16,11 +16,14 @@ import com.finalproject.tuwaiqfinal.Repository.CustomerRepository;
 import com.finalproject.tuwaiqfinal.Repository.GameRepository;
 import com.finalproject.tuwaiqfinal.Repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -45,6 +48,10 @@ public class PaymentService {
     @Autowired
     private GameRepository gameRepository;
 
+
+    private final InvoicePdfService invoicePdfService;
+    private final S3Service s3Service;
+    private final MailService mailService;
 
     // 1- create method for Payment process:
     public MoyasarPaymentResponseDTO processPayment(PaymentRequest paymentRequest) {
@@ -177,6 +184,8 @@ public class PaymentService {
             throw new ApiException("Payment not found with Moyasar ID: " + moyasarPaymentId);
         }
 
+        payment.setPaid_at(LocalDateTime.now());
+
         // 2. Update payment status
         payment.setStatus(status.toLowerCase());
         paymentRepository.save(payment);
@@ -200,6 +209,34 @@ public class PaymentService {
                 Game game = booking.getGame();
                 game.setIsAvailable(false);
                 gameRepository.save(game);
+
+
+                byte[] pdf = invoicePdfService.generateInvoicePdf(booking.getSubHall().getHall(),
+                        booking.getSubHall().getHall().getOwner(),
+                        booking,
+                        booking.getCustomer().getUser(),
+                        booking.getCustomer(),
+                        booking.getSubHall(),
+                        payment,
+                        game);
+
+                //save invoice in s3
+                s3Service.uploadBytes(payment.getMoyasarPaymentId(), pdf, "application/pdf");
+                mailService.sendInvoiceWithAttachment(
+                        booking.getCustomer().getUser().getEmail(),
+                        booking.getCustomer().getUser().getUsername(),
+                        payment.getId().toString(),
+                        payment.getPaid_at(),
+                        booking.getTotalPrice(),
+                        payment.getCurrency(),
+                        "salat.com",
+                        pdf,
+                        "invoice-"+payment.getMoyasarPaymentId()+".pdf"
+
+                        );
+
+
+
             }
         }
     }
@@ -211,6 +248,15 @@ public class PaymentService {
             transactionUrl = moyasarResponse.getSource().getTransaction_url();
         }
         return transactionUrl;
+    }
+
+    public byte[] downloadInvoice(Integer bookingId){
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(()->new ApiException("booking not found"));
+
+        String moyasarPaymentId = paymentRepository.findByBooking(booking)
+                .getMoyasarPaymentId();
+        return s3Service.downloadBytes(moyasarPaymentId);
     }
 
 

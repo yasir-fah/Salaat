@@ -14,9 +14,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
@@ -108,5 +110,15 @@ public class ControllerAdvise {
         // Return 500 Internal Server Error for unexpected exceptions
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ApiResponse("An unexpected error occurred. Please try again later."));
+    }
+
+    @ExceptionHandler(MultipartException.class)
+    public ResponseEntity<?> MultipartException(MultipartException MultipartException){
+        return ResponseEntity.status(400).body(MultipartException.getMessage());
+    }
+
+    @ExceptionHandler(NoSuchKeyException.class)
+    public ResponseEntity<?> NoSuchKeyException(NoSuchKeyException NoSuchKeyException){
+        return ResponseEntity.status(400).body(NoSuchKeyException.getMessage());
     }
 }

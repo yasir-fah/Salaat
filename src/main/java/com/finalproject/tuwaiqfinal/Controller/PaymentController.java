@@ -1,5 +1,6 @@
 package com.finalproject.tuwaiqfinal.Controller;
 
+import com.finalproject.tuwaiqfinal.Api.ApiException;
 import com.finalproject.tuwaiqfinal.DTOin.PaymentRequest;
 import com.finalproject.tuwaiqfinal.DTOout.MoyasarPaymentResponseDTO;
 import com.finalproject.tuwaiqfinal.DTOout.PaymentCreationResponseDTO;
@@ -7,7 +8,9 @@ import com.finalproject.tuwaiqfinal.Model.Game;
 import com.finalproject.tuwaiqfinal.Service.GameService;
 import com.finalproject.tuwaiqfinal.Service.PaymentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,6 +63,25 @@ public class    PaymentController {
                     .body("Failed to process payment callback: " + e.getMessage());
         }
     }
+
+    @GetMapping(value = "/download/invoice/{bookingId}", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> downloadFile(@PathVariable("bookingId") Integer bookingId) {
+        byte[] data = paymentService.downloadInvoice(bookingId);
+        if (data == null || data.length == 0) {
+            throw new ApiException("Invoice not found or empty");
+        }
+
+
+        String filename = "invoice-" + bookingId + ".pdf";
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .contentLength(data.length)
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + filename + "\"; filename*=UTF-8''" + java.net.URLEncoder.encode(filename, java.nio.charset.StandardCharsets.UTF_8))
+                .body(data);
+    }
+
 }
 
 
