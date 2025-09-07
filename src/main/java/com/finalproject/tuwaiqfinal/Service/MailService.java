@@ -1,5 +1,6 @@
 package com.finalproject.tuwaiqfinal.Service;
 
+import com.finalproject.tuwaiqfinal.Api.ApiException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -220,7 +221,6 @@ public class MailService {
             helper.setSubject(subject);
             helper.setText(htmlBody, true);
             helper.addAttachment(attachmentFilename, () -> new java.io.ByteArrayInputStream(attachment));
-
             mailSender.send(message);
         } catch (MessagingException e) {
             throw new RuntimeException("Failed to send email", e);
@@ -274,6 +274,7 @@ public class MailService {
                 brand, invoiceNumber, totalStr, currency);
 
         // Use your existing method to send with attachment
+        log.info("sending attachment");
         sendWithAttachment(to, subject, html, attachment, attachmentFilename);
     }
 
