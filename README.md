@@ -248,8 +248,8 @@
 For questions or support:  
 
 - **Email:** yasiralateeq178@gmail.com
-- **Email:** Ziyad@gmail.com
-- **Email:** abdulrahman@gmail.com  
+- **Email:** zyadexec@gmail.com
+- **Email:** mr.lamics@gmail.com  
 
 ---
 
