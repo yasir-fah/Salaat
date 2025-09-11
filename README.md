@@ -98,6 +98,9 @@
 - Figma Design: 🔗 [Link  ](https://www.figma.com/proto/ImpAUj7GfdwHzNIl8hSUaE/final-project?node-id=151-1297&p=f&t=C1hLcuKVNaPO5njg-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=128%3A1143&show-proto-sidebar=1)
 - Postman Documentation: 🔗 [Link  ](https://documenter.getpostman.com/view/48183973/2sB3HnJegq)
 
+- postman demo: 🔗 [Link  ](https://drive.google.com/file/d/1KQODyG9AAUMsARQMiI7XoxjZQ4O17uY6/view?usp=sharing)
+
+- figma demo:  🔗 [Link  ](https://drive.google.com/file/d/1M4ZRa0wmTf3bHm5Eq8OOprwHoconLW1v/view?usp=sharing)
 ---
 
 ## 🔐 JWT Auth  
