@@ -63,7 +63,7 @@ public class BookingController {
     @PostMapping("/remind-unpaid/{hallId}")
     public ResponseEntity<?> remindUnpaid(@AuthenticationPrincipal User owner, @PathVariable Integer hallId) {
         bookingService.remindUnpaidByHall(owner.getId(), hallId);
-        return ResponseEntity.status(200).body("message is send successfully");
+        return ResponseEntity.status(200).body(new ApiResponse("message is send successfully"));
     }
 
 }

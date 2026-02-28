@@ -2,6 +2,7 @@ package com.finalproject.tuwaiqfinal.Controller;
 
 import com.finalproject.tuwaiqfinal.Api.ApiResponse;
 import com.finalproject.tuwaiqfinal.DTOin.OwnerDTO;
+import com.finalproject.tuwaiqfinal.DTOout.ReviewFeedbackDTO;
 import com.finalproject.tuwaiqfinal.Model.User;
 import com.finalproject.tuwaiqfinal.Service.HallService;
 import com.finalproject.tuwaiqfinal.Service.OwnerService;
@@ -48,7 +49,7 @@ public class OwnerController {
     @GetMapping("/feedback/{hall_id}")
     public ResponseEntity<?> reviewFeedback(@AuthenticationPrincipal User user,
                                             @PathVariable Integer hall_id) {
-        String result = ownerService.reviewFeedback(user.getId(),hall_id);
+        ReviewFeedbackDTO result = ownerService.reviewFeedback(user.getId(),hall_id);
         return ResponseEntity.status(200).body(result);
     }
 
@@ -56,7 +57,7 @@ public class OwnerController {
     public ResponseEntity<?> subHallFeedback(@AuthenticationPrincipal User user,
                                              @PathVariable Integer sub_hall_id) {
         String result = ownerService.subHallFeedback(user.getId(),sub_hall_id);
-        return ResponseEntity.status(200).body(result);
+        return ResponseEntity.status(200).body(new ApiResponse(result));
     }
 
     @DeleteMapping("/cancel/booking/{bookingId}")

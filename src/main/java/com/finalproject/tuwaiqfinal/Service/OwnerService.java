@@ -3,6 +3,7 @@ package com.finalproject.tuwaiqfinal.Service;
 
 import com.finalproject.tuwaiqfinal.Api.ApiException;
 import com.finalproject.tuwaiqfinal.DTOin.OwnerDTO;
+import com.finalproject.tuwaiqfinal.DTOout.ReviewFeedbackDTO;
 import com.finalproject.tuwaiqfinal.Model.*;
 import com.finalproject.tuwaiqfinal.Repository.*;
 import lombok.AllArgsConstructor;
@@ -74,7 +75,7 @@ public class OwnerService {
         ownerRepository.delete(owner);
     }
 
-    public String reviewFeedback(Integer ownerId, Integer hallId) {
+    public ReviewFeedbackDTO reviewFeedback(Integer ownerId, Integer hallId) {
 
         // check if owner exists
         Owner owner = ownerRepository.findOwnerById(ownerId);

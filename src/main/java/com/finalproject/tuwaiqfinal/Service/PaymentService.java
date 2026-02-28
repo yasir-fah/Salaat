@@ -258,7 +258,7 @@ public class PaymentService {
                         payment.getPaid_at(),
                         booking.getTotalPrice(),
                         payment.getCurrency(),
-                        "salat.com",
+                        "http://final-server-env.eba-fitwn3ht.eu-central-1.elasticbeanstalk.com/",
                         pdf,
                         "invoice-"+payment.getMoyasarPaymentId()+".pdf"
 

@@ -106,7 +106,7 @@ public class bookingService {
         bookingRepository.save(booking);
 
         /// 11- Send confirmation email
-        String verifyUrl = "https://salat.com/verify?email=" + customer.getUser().getUsername();
+        String verifyUrl = "http://final-server-env.eba-fitwn3ht.eu-central-1.elasticbeanstalk.com/ " + customer.getUser().getUsername();
         try {
             mailService.sendWelcomeHtml(customer.getUser().getEmail(), customer.getUser().getUsername(), verifyUrl);
         } catch

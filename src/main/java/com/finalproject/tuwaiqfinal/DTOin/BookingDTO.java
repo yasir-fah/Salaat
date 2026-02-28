@@ -24,8 +24,6 @@ public class BookingDTO {
     @Min(value = 1, message = "Minimum duration is 30 minutes")
     private Integer duration_minutes;
 
-    @NotNull(message = "isSplit cannot be null")
-    private Boolean isSplit;
 
     @NotNull(message = "Start time cannot be null")
     @Future(message = "Start time must be in the future")

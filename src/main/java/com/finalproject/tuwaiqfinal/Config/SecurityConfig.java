@@ -112,6 +112,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/v1/review-hall/hall/{hallId}/rating").hasAuthority("ADMIN")
                 .requestMatchers("/api/v1/review-sub-hall/get").hasAuthority("ADMIN")
                 .requestMatchers("/api/v1/customer/getall").hasAuthority("ADMIN")
+                .requestMatchers("/docs/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
 
                 .anyRequest().authenticated()
                 .and()
